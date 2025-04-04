@@ -1,39 +1,45 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const base_url = "http://localhost:8001/";
-export const fetchTodo = createAsyncThunk("todo/fetchTodo", async () => {
-  const response = await axios.get(`${base_url}/todos`);
-  console.log("todo response >>>", response.data);
-});
+import { act } from "react";
+
+const API_URL = 'http://localhost:8002'
+export const fetchTodos = createAsyncThunk('todo/fetchTodos', async () => {
+  const response = await axios.get(`${API_URL}/todos`)
+  console.log('response todos >>>', response.data);
+  return response.data
+})
+
+
+
 
 const initialState = {
   loading: false,
-  data: [],
-  error: null,
-};
+  todo: [],
+  error: false
+}
+
+
+
+
+
 
 const todoSlice = createSlice({
-  name: "todos",
+  name: 'todos',
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchTodo.pending, (state, action) => {
+    builder.addCase(fetchTodos.pending, (state) => {
       state.loading = true;
-      state.console.log("pending state >>>>", action);
     });
-    builder.addCase(fetchTodo.fulfilled, (state, action) => {
+    builder.addCase(fetchTodos.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
-      console.log("state is fulfilled >>>", action);
+      state.todo = action.payload;
     });
-
-    builder.addCase(fetchTodo.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-      console.log("state is rejected >>>", action);
-    });
-  },
+    builder.addCase(fetchTodos.rejected, (state) => {
+      state.error = action.payload
+    })
+  }
 });
 
-export const { loading, data, error } = todoSlice.actions;
+export const { loading, error, todo } = todoSlice.actions;
 
 export default todoSlice.reducer;
