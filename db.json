@@ -2,7 +2,12 @@
     "todos": [
         {
             "id": 1,
-            "title": "create react app",
+            "title": "Learn HTML",
+            "completed": false
+        },
+        {
+            "id": 2,
+            "title": "Learn CSS",
             "completed": false
         }
     ]
